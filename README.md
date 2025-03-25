@@ -9,18 +9,10 @@ bun install
 ## Run the backend
 
 ```
-cd apps/backend
-```
-
-```
-bun run index.ts
+bun run start:backend
 ```
 
 ## Run the frontend
-
-```
-cd apps/frontend
-```
 
 ```
 bun run dev
