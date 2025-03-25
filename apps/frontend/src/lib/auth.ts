@@ -33,7 +33,6 @@ export const { handlers, auth } = NextAuth({
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(credentials),
-              credentials: "include",
             }
           );
 
@@ -55,6 +54,7 @@ export const { handlers, auth } = NextAuth({
       },
     }),
   ],
+  trustHost: true,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
