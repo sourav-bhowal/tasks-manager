@@ -7,13 +7,13 @@ import {
   getTask,
   updateTask,
 } from "../controllers/tasks.controller.js";
-// import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 // Create a new router
 const taskRouter = Router();
 
 // Apply auth middleware
-// taskRouter.use(authMiddleware);
+taskRouter.use(authMiddleware);
 
 // POST /api/task/create-task
 taskRouter.post("/create-task", createTask);

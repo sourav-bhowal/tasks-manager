@@ -1,4 +1,6 @@
+import AuthPage from "@/src/components/AuthPage";
+
 // Sign Up Page
 export default function SignUpPage() {
-  return <main>SignUpPage</main>;
+  return <AuthPage isSignIn={false} />;
 }

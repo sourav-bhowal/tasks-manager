@@ -17,6 +17,10 @@ export const createTask = asyncHandler(
 
     // If validation fails, throw an error
     if (!success) {
+      response
+        .status(400)
+        .json(new apiResponse(400, null, error?.errors[0]?.message));
+
       throw new apiError(400, error?.errors[0]?.message);
     }
 
@@ -28,11 +32,16 @@ export const createTask = asyncHandler(
       data: {
         title,
         description,
+        userId: request.user.id,
       },
     });
 
     // If task is not created, throw an error
     if (!newTask) {
+      response
+        .status(500)
+        .json(new apiResponse(500, null, "Task could not be created."));
+
       throw new apiError(400, "Task could not be created.");
     }
 
@@ -48,6 +57,9 @@ export const getAllTasks = asyncHandler(
   async (request: Request, response: Response) => {
     // Get all tasks
     const tasks = await prisma.task.findMany({
+      where: {
+        userId: request.user.id,
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -70,6 +82,7 @@ export const getTask = asyncHandler(
     const task = await prisma.task.findUnique({
       where: {
         id,
+        userId: request.user.id,
       },
     });
 
@@ -106,6 +119,7 @@ export const updateTask = asyncHandler(
     const updatedTask = await prisma.task.update({
       where: {
         id,
+        userId: request.user.id,
       },
       data: {
         title,
@@ -116,6 +130,10 @@ export const updateTask = asyncHandler(
 
     // If task is not updated, throw an error
     if (!updatedTask) {
+      response
+        .status(500)
+        .json(new apiResponse(500, null, "Task could not be updated."));
+
       throw new apiError(400, "Task could not be updated.");
     }
 
@@ -136,11 +154,16 @@ export const deleteTask = asyncHandler(
     const deletedTask = await prisma.task.delete({
       where: {
         id,
+        userId: request.user.id,
       },
     });
 
     // If task is not deleted, throw an error
     if (!deletedTask) {
+      response
+        .status(500)
+        .json(new apiResponse(500, null, "Task could not be deleted."));
+
       throw new apiError(400, "Task could not be deleted.");
     }
 

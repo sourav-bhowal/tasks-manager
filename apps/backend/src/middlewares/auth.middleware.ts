@@ -9,7 +9,7 @@ export const authMiddleware = asyncHandler(
     // Get the token from the request headers
     const token =
       request.headers.authorization?.split(" ")[1] ||
-      request.cookies.accessToken;
+      request.cookies?.accessToken;
 
     // If the token is not provided, send a 401 response
     if (!token) {

@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { toast } from "sonner";
 
 // NextAuth configuration
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth } = NextAuth({
   // Providers are defined here
   providers: [
     CredentialsProvider({
@@ -41,8 +42,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             throw new Error("Invalid credentials");
           }
 
-          // Return the user object
-          const { user } = await response.json();
+          // Parse the response
+          const res = await response.json();
+
+          // Return the user
+          const user = res.data.user;
 
           return user;
         } catch (error) {
@@ -76,6 +80,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: "/signin",
+  },
+  cookies: {
+    sessionToken: {
+      name: "accessToken",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
   },
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 });

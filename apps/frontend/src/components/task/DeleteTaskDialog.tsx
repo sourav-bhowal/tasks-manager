@@ -1,5 +1,5 @@
 import { Button } from "@workspace/ui/components/button";
-import { Task } from "../types/types";
+import { Task } from "../../types/types";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,8 @@ import {
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 // Delete task dialog props
 interface DeleteTaskDialogProps {
@@ -28,7 +30,10 @@ export default function DeleteTaskDialog({
   // State for isPending
   const [isPending, setIsPending] = useState(false);
 
-  // Router 
+  // Session for the user
+  const { data: session } = useSession();
+
+  // Router
   const router = useRouter();
 
   // handle open change
@@ -46,16 +51,31 @@ export default function DeleteTaskDialog({
         `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/delete-task/${id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+          },
         }
       );
 
       if (res.ok) {
         setIsPending(false);
+        toast.success("Task deleted successfully.", {
+          style: {
+            backgroundColor: "#71f871",
+            color: "#1f2937",
+          },
+        });
         onClose();
-        router.refresh();
+        router.refresh(); // refresh the router
       }
     } catch (error) {
       setIsPending(false);
+      toast.error("An error occurred. Please try again.", {
+        style: {
+          backgroundColor: "#f87171",
+          color: "#1f2937",
+        },
+      });
       console.error(error);
     } finally {
       setIsPending(false);

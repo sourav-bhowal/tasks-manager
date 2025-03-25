@@ -1,9 +1,8 @@
-import { useForm, zodResolver } from "@workspace/ui/hooks";
-import { Task } from "../types/types";
 import {
-  updateTaskSchema,
-  UpdateTaskSchemaType,
+  addTaskSchema,
+  AddTaskSchemaType,
 } from "@repo/validations/src/validation";
+import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -19,74 +18,94 @@ import {
   FormLabel,
   FormMessage,
 } from "@workspace/ui/components/form";
-import { Button } from "@workspace/ui/components/button";
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { useForm, zodResolver } from "@workspace/ui/hooks";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
-// Props for the EditTaskDialog component
-interface EditTaskDialogProps {
-  task: Task;
+// Props for the AddTaskDialog component
+interface AddTaskDialogProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
 }
 
-// EditTaskDialog component
-export default function EditTaskDialog({
-  task,
-  open,
-  onOpenChange,
-}: EditTaskDialogProps) {
+// Add Task Dialog component
+export default function AddTaskDialog({ open, onClose }: AddTaskDialogProps) {
+  // Session for the user
+  const { data: session } = useSession();
+
   // State for is pending
   const [isPending, setIsPending] = useState(false);
 
   // Router
   const router = useRouter();
 
-  // Edit Form
-  const form = useForm<UpdateTaskSchemaType>({
-    resolver: zodResolver(updateTaskSchema),
+  // Handle open change
+  function handleOpenChange(open: boolean) {
+    if (!open || !isPending) {
+      onClose();
+    }
+  }
+
+  // Form
+  const form = useForm<AddTaskSchemaType>({
+    resolver: zodResolver(addTaskSchema),
     defaultValues: {
-      title: task.title,
-      description: task.description,
+      title: "",
+      description: "",
     },
   });
 
   // On Submit function
-  async function onSubmit(values: UpdateTaskSchemaType) {
+  async function onSubmit(values: AddTaskSchemaType) {
     setIsPending(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/update-task/${task.id}`,
+        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/create-task`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.user.accessToken}`,
           },
           body: JSON.stringify(values),
         }
       );
       if (res.ok) {
         setIsPending(false);
-        onOpenChange(false);
-        router.refresh(); // refresh the router
+        onClose();
+        toast.success("Task added successfully", {
+          style: {
+            backgroundColor: "#71f871",
+            color: "#1f2937",
+          },
+        });
+        form.reset();
+        router.refresh();
       }
     } catch (error) {
-      setIsPending(false);
+      toast.error("An error occurred. Please try again later", {
+        style: {
+          backgroundColor: "#f87171",
+          color: "#1f2937",
+        },
+      });
       console.error(error);
     } finally {
       setIsPending(false);
     }
   }
 
-  // Return the JSX for the EditTaskDialog component
+  // Add Task Dialog
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Task</DialogTitle>
+          <DialogTitle>Add Task</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -135,7 +154,7 @@ export default function EditTaskDialog({
                 {isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  "Save"
+                  "Add Task"
                 )}
               </Button>
             </DialogFooter>

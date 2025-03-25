@@ -1,3 +1,6 @@
+import AuthPage from "@/src/components/AuthPage";
+
+// Sign In Page
 export default function SignInPage() {
-  return <div>SignInPage</div>;
+  return <AuthPage isSignIn={true} />;
 }

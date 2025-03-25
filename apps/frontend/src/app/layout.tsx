@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@repo/ui/globals.css";
 import { Toaster } from "@workspace/ui/components/sonner";
-// import SessionContextProvider from "../context/SessionProvider";
+import SessionContextProvider from "../context/SessionProvider";
+import TopBar from "../components/TopBar";
 
 // Poppins is a Google Font that we are using in this example
 const poppins = Poppins({
@@ -27,13 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     // Session context provider is a wrapper component that provides the session context to the entire application
-    // <SessionContextProvider>
-    <html lang="en" className="scroll-smooth">
-      <body className={`${poppins.className} antialiased`}>
-        {children}
-        <Toaster /> {/* Toaster component from workspace/ui */}
-      </body>
-    </html>
-    // </SessionContextProvider>
+    <SessionContextProvider>
+      <html lang="en" className="scroll-smooth">
+        <body className={`${poppins.className} antialiased`}>
+          <TopBar />
+          {children}
+          <Toaster /> {/* Toaster component from workspace/ui */}
+        </body>
+      </html>
+    </SessionContextProvider>
   );
 }

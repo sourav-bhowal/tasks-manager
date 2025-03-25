@@ -14,8 +14,12 @@ export const signUpUser = asyncHandler(
     // Validate request body
     const { error, success, data } = signUpSchema.safeParse(request.body);
 
-    // If validation fails, throw an error
+    // If validation fails, throw an error and send response
     if (!success) {
+      response
+        .status(400)
+        .json(new apiResponse(400, null, error?.errors[0]?.message));
+
       throw new apiError(400, error?.errors[0]?.message);
     }
 
@@ -29,12 +33,13 @@ export const signUpUser = asyncHandler(
       },
     });
 
-    // If user exists, throw an error
+    // If user exists, throw an error and send response
     if (existingUser) {
-      throw new apiError(
-        400,
-        "User with this email or username already exists."
-      );
+      response
+        .status(409)
+        .json(new apiResponse(409, null, "User already exists."));
+
+      throw new apiError(400, "User already exists.");
     }
 
     // Hash the password
@@ -49,8 +54,12 @@ export const signUpUser = asyncHandler(
       },
     });
 
-    // If user is not created, throw an error
+    // If user is not created, throw an error and send response
     if (!newUser) {
+      response
+        .status(500)
+        .json(new apiResponse(500, null, "User could not be created."));
+
       throw new apiError(400, "User could not be created.");
     }
 
@@ -69,6 +78,10 @@ export const signInUser = asyncHandler(
 
     // If validation fails, throw an error
     if (!success) {
+      response
+        .status(400)
+        .json(new apiResponse(400, null, error?.errors[0]?.message));
+
       throw new apiError(400, error?.errors[0]?.message);
     }
 
@@ -82,6 +95,15 @@ export const signInUser = asyncHandler(
 
     // If user does not exist, throw an error
     if (!user) {
+      response
+        .status(400)
+        .json(
+          new apiResponse(
+            400,
+            null,
+            "Invalid credentials or user does not exist."
+          )
+        );
       throw new apiError(400, "Invalid credentials or user does not exist.");
     }
 
@@ -90,13 +112,16 @@ export const signInUser = asyncHandler(
 
     // If password is invalid, throw an error
     if (!isPasswordValid) {
+      response
+        .status(400)
+        .json(new apiResponse(400, null, "Invalid credentials."));
       throw new apiError(400, "Invalid credentials.");
     }
 
     // Generate JWT Access token
     const accessToken = jwt.sign(
       {
-        userId: user.id,
+        id: user.id,
         email: user.email,
         username: user.username,
       },
@@ -130,5 +155,18 @@ export const signInUser = asyncHandler(
         "User signed in successfully."
       )
     );
+  }
+);
+
+// Sign Out Controller
+export const signOutUser = asyncHandler(
+  async (request: Request, response: Response) => {
+    // Clear cookie
+    response.clearCookie("accessToken");
+
+    // Send response
+    response
+      .status(200)
+      .json(new apiResponse(200, null, "User signed out successfully."));
   }
 );
