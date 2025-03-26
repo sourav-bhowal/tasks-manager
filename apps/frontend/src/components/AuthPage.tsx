@@ -70,7 +70,7 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
           });
         }
       } else {
-        router.push("/task");
+        router.replace("/task");
         toast.success("Signed in successfully", {
           style: {
             backgroundColor: "#71f871",
