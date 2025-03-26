@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
-      <div className="container px-4 md:px-6">
+    <section className="flex items-center justify-center mx-auto mt-20">
+      <div className="">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
           <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
