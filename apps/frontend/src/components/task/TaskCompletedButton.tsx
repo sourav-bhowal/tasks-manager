@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { config } from "@/config";
 
 export default function TaskCompletedButton({ task }: { task: Task }) {
   const { data: session } = useSession();
@@ -18,7 +19,7 @@ export default function TaskCompletedButton({ task }: { task: Task }) {
     try {
       setIsPending(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/update-task/${task.id}`,
+        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/update-task/${task.id}`,
         {
           method: "PUT",
           headers: {

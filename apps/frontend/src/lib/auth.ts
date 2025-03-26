@@ -26,7 +26,7 @@ export const { handlers, auth } = NextAuth({
         try {
           // Send the credentials to the backend
           const response = await fetch(
-            `${process.env.HTTP_BACKEND_URL}/user/signin`,
+            `${config.HTTP_BACKEND_URL}/user/signin`,
             {
               method: "POST",
               headers: {

@@ -28,10 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Add the user router
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 
 // Add the task router
-app.use("/api/task", taskRouter);
+app.use("/task", taskRouter);
 
 // Listen on the specified port
 app.listen(PORT, () => {

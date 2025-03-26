@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { config } from "@/config";
 
 // AuthPage component
 interface AuthPageProps {
@@ -65,7 +66,7 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
     // Sign up
     else {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
+        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
         {
           method: "POST",
           headers: {

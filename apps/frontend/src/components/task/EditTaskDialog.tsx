@@ -27,6 +27,7 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { config } from "@/config";
 
 // Props for the EditTaskDialog component
 interface EditTaskDialogProps {
@@ -64,7 +65,7 @@ export default function EditTaskDialog({
     setIsPending(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/update-task/${task.id}`,
+        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/update-task/${task.id}`,
         {
           method: "PUT",
           headers: {
