@@ -91,5 +91,5 @@ export const { handlers, auth } = NextAuth({
       },
     },
   },
-  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+  secret: config.NEXT_PUBLIC_AUTH_SECRET,
 });

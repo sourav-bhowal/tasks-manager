@@ -29,22 +29,22 @@ export default async function NavBar() {
                   My Tasks
                 </Link>
               </div>
-              {!session?.user ? (
-                <div className="ml-10 flex items-center space-x-4">
-                  <Link href={"/signin"}>
-                    <Button size={"lg"}>SignIn</Button>
-                  </Link>
-                  <Link href={"/signup"}>
-                    <Button size={"lg"} variant={"outline"}>
-                      SignUp
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <p className="hidden xl:block">
-                  Welcome, {session.user.username}
-                </p>
-              )}
+              <div className="hidden xl:block">
+                {!session?.user ? (
+                  <div className="ml-10 flex items-center space-x-4">
+                    <Link href={"/signin"}>
+                      <Button size={"lg"}>SignIn</Button>
+                    </Link>
+                    <Link href={"/signup"}>
+                      <Button size={"lg"} variant={"outline"}>
+                        SignUp
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <p>Welcome, {session.user.username}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
