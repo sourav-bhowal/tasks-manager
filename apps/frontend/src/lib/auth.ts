@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 // NextAuth configuration
-export const { handlers, auth, signOut } = NextAuth({
+export const { handlers, auth, signOut, signIn } = NextAuth({
   // Providers are defined here
   providers: [
     CredentialsProvider({
@@ -80,6 +80,7 @@ export const { handlers, auth, signOut } = NextAuth({
   },
   pages: {
     signIn: "/signin",
+    error: "/signin",
   },
   cookies: {
     sessionToken: {
