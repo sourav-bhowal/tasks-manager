@@ -1,6 +1,6 @@
+import { config } from "@/config";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { toast } from "sonner";
 
 // NextAuth configuration
 export const { handlers, auth } = NextAuth({
