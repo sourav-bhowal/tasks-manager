@@ -49,11 +49,11 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
       const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirectTo: "/task",
       });
 
       // Redirect to the task page
-      if (res?.ok) {
+      if (res?.url) {
+        router.push("/task");
         toast.success("Signed in successfully", {
           style: {
             backgroundColor: "#71f871",
