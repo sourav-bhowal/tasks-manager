@@ -49,7 +49,7 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
       const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirectTo: "/task",
+        redirect: false,
       });
 
       // If error
@@ -69,11 +69,8 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
             },
           });
         }
-      }
-
-      // If url
-      if (res?.url) {
-        router.replace("/task");
+      } else {
+        router.push("/task");
         toast.success("Signed in successfully", {
           style: {
             backgroundColor: "#71f871",
