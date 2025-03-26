@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=sourav
+      - POSTGRES_PASSWORD=s2o0u0r3av
+      - POSTGRES_DB=mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - task-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://sourav:s2o0u0r3av@postgres:5432/mydatabase
+      - CORS_ORIGIN=http://localhost:3000
+      - JWT_SECRET=secret
+      - PORT=8000
+    depends_on:
+      - postgres
+    networks:
+      - task-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - HTTP_BACKEND_URL=http://backend:8000/api
+      - NEXT_PUBLIC_HTTP_BACKEND_URL=http://backend:8000/api
+      - NEXT_PUBLIC_AUTH_SECRET=secret
+      - AUTH_URL=http://frontend:3000
+    depends_on:
+      - postgres
+    networks:
+      - task-network
+
+volumes:
+  postgres_data:
+
+networks:
+  task-network:
+    driver: bridge
