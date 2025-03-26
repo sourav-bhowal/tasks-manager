@@ -17,3 +17,5 @@ bun run start:backend
 ```
 bun run dev
 ```
+![Screenshot](screenshots/screen1.png)
+![Screenshot](screenshots/screen2.png)

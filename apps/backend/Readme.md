@@ -7,7 +7,7 @@ This API provides user authentication functionalities, including sign up, sign i
 ## Base URL
 
 ````
-http://localhost:8000/api
+http://localhost:8000
 
 ````
 
