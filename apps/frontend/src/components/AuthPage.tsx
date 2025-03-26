@@ -49,53 +49,68 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
       const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirectTo: `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/task`,
+        redirect: false,
       });
 
-      // Redirect to the task page
-      if (res?.url) {
-        toast.success("Signed in successfully", {
-          style: {
-            backgroundColor: "#71f871",
-            color: "#1f2937",
-          },
-        });
-      }
-    }
-    // Sign up
-    else {
-      const response = await fetch(
-        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      // If error
+      if (res?.error) {
+        // If credentials signin error
+        if (res.error === "CredentialsSignin") {
+          toast.error("Invalid email or password", {
+            style: {
+              backgroundColor: "#f87171",
+              color: "#1f2937",
+            },
+          });
+        } else {
+          toast.error("Something went wrong. Try again later.", {
+            style: {
+              backgroundColor: "#f87171",
+              color: "#1f2937",
+            },
+          });
         }
-      );
 
-      // Response data
-      const res = await response.json();
-
-      // Redirect to the task page
-      if (res.success || res.status === 201) {
-        router.push("/signin");
-        toast.success("Account created successfully", {
-          style: {
-            backgroundColor: "#71f871",
-            color: "#1f2937",
-          },
-        });
+        // If url
+        if (res?.url) {
+          router.replace("/task");
+        }
       }
-      // Show error message
+      // Sign up
       else {
-        toast.error(res.message, {
-          style: {
-            backgroundColor: "#f87171",
-            color: "#1f2937",
-          },
-        });
+        const response = await fetch(
+          `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        // Response data
+        const res = await response.json();
+
+        // Redirect to the task page
+        if (res.success || res.status === 201) {
+          router.push("/signin");
+          toast.success("Account created successfully", {
+            style: {
+              backgroundColor: "#71f871",
+              color: "#1f2937",
+            },
+          });
+        }
+        // Show error message
+        else {
+          toast.error(res.message, {
+            style: {
+              backgroundColor: "#f87171",
+              color: "#1f2937",
+            },
+          });
+        }
       }
     }
   };
