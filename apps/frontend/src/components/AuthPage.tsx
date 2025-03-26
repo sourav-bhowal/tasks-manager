@@ -49,7 +49,7 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
       const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirectTo: "/task",
       });
 
       // Redirect to the task page
@@ -60,7 +60,6 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
             color: "#1f2937",
           },
         });
-        router.push("/task");
       }
     }
     // Sign up
