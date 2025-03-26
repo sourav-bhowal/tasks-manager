@@ -36,10 +36,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - HTTP_BACKEND_URL=http://backend:8000/api
-      - NEXT_PUBLIC_HTTP_BACKEND_URL=http://backend:8000/api
+      - HTTP_BACKEND_URL=http://localhost:8000
+      - NEXT_PUBLIC_HTTP_BACKEND_URL=http://localhost:8000
       - NEXT_PUBLIC_AUTH_SECRET=secret
-      - AUTH_URL=http://frontend:3000
     depends_on:
       - postgres
     networks:

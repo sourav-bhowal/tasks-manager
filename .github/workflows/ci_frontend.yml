@@ -43,6 +43,7 @@ jobs:
                 -e HTTP_BACKEND_URL=${{ secrets.HTTP_BACKEND_URL }} \
                 -e NEXT_PUBLIC_HTTP_BACKEND_URL=${{ secrets.NEXT_PUBLIC_HTTP_BACKEND_URL }} \
                 -e NEXT_PUBLIC_AUTH_SECRET=${{ secrets.NEXT_PUBLIC_AUTH_SECRET }} \
+                -e AUTH_URL=${{ secrets.AUTH_URL }} \
                 -p 3000:3000 \
                 souravbhowal/taskapp_frontend:${{ github.sha }}
 
