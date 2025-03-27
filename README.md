@@ -1,8 +1,16 @@
 # Run the app
 
+## Put DATABASE_URL in .env file
+
+```
+cd packages/database
+echo "DATABASE_URL=postgres://user:password@localhost:5432/dbname" > .env
+```
+
 ## Install the dependencies
 
 ```
+cd ../..
 bun install
 ```
 
