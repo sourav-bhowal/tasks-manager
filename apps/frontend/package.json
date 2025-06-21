@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@repo/ui": "*",
     "dotenv": "^16.4.7",
     "gsap": "^3.12.7",
     "next": "15.2.2",
@@ -24,6 +23,7 @@
     "@types/react-dom": "^19",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@repo/validations": "*"
+    "@repo/validations": "*",
+    "@repo/ui": "*"
   }
 }
