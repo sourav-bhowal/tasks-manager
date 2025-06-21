@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { config } from "@/config";
+import React from "react";
 
 // Delete task dialog props
 interface DeleteTaskDialogProps {
@@ -49,7 +49,7 @@ export default function DeleteTaskDialog({
     setIsPending(true);
     try {
       const res = await fetch(
-        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/delete-task/${id}`,
+        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/delete-task/${id}`,
         {
           method: "DELETE",
           headers: {

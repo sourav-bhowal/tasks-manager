@@ -26,7 +26,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { config } from "@/config";
+import React from "react";
 
 // Props for the AddTaskDialog component
 interface AddTaskDialogProps {
@@ -66,7 +66,7 @@ export default function AddTaskDialog({ open, onClose }: AddTaskDialogProps) {
     setIsPending(true);
     try {
       const res = await fetch(
-        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/create-task`,
+        `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/task/create-task`,
         {
           method: "POST",
           headers: {

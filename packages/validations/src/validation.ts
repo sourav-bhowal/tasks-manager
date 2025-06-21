@@ -16,7 +16,7 @@ export const signUpSchema = z.object({
 });
 
 // Type of SignUp schema
-export type SignUpSchemaType = z.infer<typeof signUpSchema>;
+export type SignUpSchemaType = z.infer<typeof signUpSchema>
 
 // SignIn validation schema
 export const signInSchema = z.object({

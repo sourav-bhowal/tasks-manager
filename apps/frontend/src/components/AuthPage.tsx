@@ -20,7 +20,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import { config } from "@/config";
+import React, { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 // AuthPage component
 interface AuthPageProps {
@@ -31,6 +32,8 @@ interface AuthPageProps {
 export default function AuthPage({ isSignIn }: AuthPageProps) {
   // Router
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form
   const form = useForm<SignInSchemaType | SignUpSchemaType>({
@@ -44,78 +47,93 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
 
   // On submit
   const onSubmit = async (data: SignInSchemaType | SignUpSchemaType) => {
-    // Sign in
-    if (isSignIn) {
-      const res = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirectTo: "/task",
-      });
+    try {
+      // Set loading state
+      setIsLoading(true);
+      // Sign in
+      if (isSignIn) {
+        const res = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirectTo: "/task",
+        });
 
-      // If error
-      if (res?.error) {
-        if (res.error === "Configuration") {
-          toast.error("Invalid credentails", {
+        // If error
+        if (res?.error) {
+          if (res.error === "Configuration") {
+            toast.error("Invalid credentails", {
+              style: {
+                backgroundColor: "#f87171",
+                color: "#1f2937",
+              },
+            });
+          } else {
+            toast.error("Something went wrong.", {
+              style: {
+                backgroundColor: "#f87171",
+                color: "#1f2937",
+              },
+            });
+          }
+        }
+
+        if (res?.url) {
+          router.replace("/task");
+          toast.success("Signed in successfully", {
             style: {
-              backgroundColor: "#f87171",
-              color: "#1f2937",
-            },
-          });
-        } else {
-          toast.error("Something went wrong.", {
-            style: {
-              backgroundColor: "#f87171",
+              backgroundColor: "#71f871",
               color: "#1f2937",
             },
           });
         }
       }
-
-      if (res?.url) {
-        router.replace("/task");
-        toast.success("Signed in successfully", {
-          style: {
-            backgroundColor: "#71f871",
-            color: "#1f2937",
-          },
-        });
-      }
-    }
-    // Sign up
-    else {
-      const response = await fetch(
-        `${config.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      // Response data
-      const res = await response.json();
-
-      // Redirect to the task page
-      if (res.success || res.status === 201) {
-        router.push("/signin");
-        toast.success("Account created successfully", {
-          style: {
-            backgroundColor: "#71f871",
-            color: "#1f2937",
-          },
-        });
-      }
-      // Show error message
+      // Sign up
       else {
-        toast.error(res.message, {
-          style: {
-            backgroundColor: "#f87171",
-            color: "#1f2937",
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_HTTP_BACKEND_URL}/user/signup`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        // Response data
+        const res = await response.json();
+
+        // Redirect to the task page
+        if (res.success || res.status === 201) {
+          router.push("/signin");
+          toast.success("Account created successfully", {
+            style: {
+              backgroundColor: "#71f871",
+              color: "#1f2937",
+            },
+          });
+        }
+        // Show error message
+        else {
+          toast.error(res.message, {
+            style: {
+              backgroundColor: "#f87171",
+              color: "#1f2937",
+            },
+          });
+        }
       }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      toast.error("An unexpected error occurred", {
+        style: {
+          backgroundColor: "#f87171",
+          color: "#1f2937",
+        },
+      });
+    } finally {
+      // Reset loading state
+      setIsLoading(false);
     }
   };
 
@@ -190,7 +208,13 @@ export default function AuthPage({ isSignIn }: AuthPageProps) {
               disabled={!form.formState.isValid}
               className="w-full"
             >
-              {isSignIn ? "Sign In" : "Sign Up"}
+              {isLoading ? (
+                <Loader2 className="ml-2 animate-spin" />
+              ) : isSignIn ? (
+                "Sign In"
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
           <div className="mt-6 text-center text-sm text-gray-600">

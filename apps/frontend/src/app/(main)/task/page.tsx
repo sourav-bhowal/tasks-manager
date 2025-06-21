@@ -1,4 +1,3 @@
-import { config } from "@/config";
 import AddTaskButton from "@/src/components/task/AddTaskButton";
 import { TaskCard } from "@/src/components/task/TaskCard";
 import { auth } from "@/src/lib/auth";
@@ -10,7 +9,7 @@ export default async function TaskPage() {
 
   // Fetch the tasks
   const response = await fetch(
-    `${config.HTTP_BACKEND_URL}/task/get-all-tasks`,
+    `${process.env.HTTP_BACKEND_URL}/task/get-all-tasks`,
     {
       headers: {
         "Content-Type": "application/json",

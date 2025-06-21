@@ -1,4 +1,3 @@
-import { config } from "@/config";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -26,7 +25,7 @@ export const { handlers, auth, signOut, signIn } = NextAuth({
         try {
           // Send the credentials to the backend
           const response = await fetch(
-            `${config.HTTP_BACKEND_URL}/user/signin`,
+            `${process.env.HTTP_BACKEND_URL}/user/signin`,
             {
               method: "POST",
               headers: {
@@ -92,5 +91,5 @@ export const { handlers, auth, signOut, signIn } = NextAuth({
       },
     },
   },
-  secret: config.NEXT_PUBLIC_AUTH_SECRET,
+  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 });
