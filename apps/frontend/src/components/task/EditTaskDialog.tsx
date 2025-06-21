@@ -27,7 +27,6 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import React from "react";
 
 // Props for the EditTaskDialog component
 interface EditTaskDialogProps {

@@ -26,7 +26,6 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import React from "react";
 
 // Props for the AddTaskDialog component
 interface AddTaskDialogProps {

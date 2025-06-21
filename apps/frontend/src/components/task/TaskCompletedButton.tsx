@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import React from "react";
 
 export default function TaskCompletedButton({ task }: { task: Task }) {
   const { data: session } = useSession();

@@ -13,7 +13,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import React from "react";
 
 // Delete task dialog props
 interface DeleteTaskDialogProps {

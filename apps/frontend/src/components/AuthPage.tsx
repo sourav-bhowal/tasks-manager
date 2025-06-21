@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 // AuthPage component
