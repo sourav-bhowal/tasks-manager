@@ -38,7 +38,6 @@
       "name": "frontend",
       "version": "0.1.0",
       "dependencies": {
-        "@repo/ui": "*",
         "dotenv": "^16.4.7",
         "gsap": "^3.12.7",
         "next": "15.2.2",
@@ -49,6 +48,7 @@
       "devDependencies": {
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
+        "@repo/ui": "*",
         "@repo/validations": "*",
         "@types/node": "^20",
         "@types/react": "^19",
